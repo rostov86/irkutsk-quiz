@@ -296,13 +296,14 @@
       "img/NE_Irkutsk_Talcy_ostrog.webp"
     ];
 
-    const QUESTIONS = window.QUESTIONS;
+    const BANK = window.QUESTIONS;
 
     const LETTERS = ["А", "Б", "В", "Г"];
     let i = 0;
     let score = 0;
     let locked = false;
     let deck = [];
+    let round = [];
 
     function shuffle(arr) {
       const a = arr.slice();
@@ -311,6 +312,35 @@
         [a[k], a[j]] = [a[j], a[k]];
       }
       return a;
+    }
+
+    function shuffleOptions(item) {
+      const pack = item.options.map((text, idx) => ({ text, correct: idx === item.a }));
+      const mixed = shuffle(pack);
+      const options = mixed.map((p) => p.text);
+      const bothAt = options.findIndex((t) => t.indexOf("оба варианта") === 0);
+      if (bothAt !== -1) {
+        const refs = [];
+        item.options.forEach((text, idx) => {
+          if (idx === item.a || text.indexOf("оба варианта") === 0) return;
+          if (idx === 1 || idx === 2) {
+            const pos = options.indexOf(text);
+            if (pos !== -1) refs.push(LETTERS[pos]);
+          }
+        });
+        refs.sort((x, y) => LETTERS.indexOf(x) - LETTERS.indexOf(y));
+        if (refs.length === 2) options[bothAt] = "оба варианта " + refs[0] + " и " + refs[1];
+      }
+      return {
+        q: item.q,
+        options,
+        a: mixed.findIndex((p) => p.correct),
+        why: item.why
+      };
+    }
+
+    function deal() {
+      round = shuffle(BANK).map(shuffleOptions);
     }
 
     function mixPhotos(need) {
@@ -327,7 +357,8 @@
     }
 
     function photoFor(n) {
-      if (!deck.length) deck = mixPhotos(QUESTIONS.length + 2);
+      const need = (round.length || BANK.length) + 2;
+      if (!deck.length) deck = mixPhotos(need);
       return deck[n % deck.length];
     }
 
@@ -372,7 +403,7 @@
     }
 
     function startScreen() {
-      deck = mixPhotos(QUESTIONS.length + 2);
+      deck = mixPhotos(BANK.length + 2);
       showBg(photoFor(0));
       sheet.innerHTML = `
         <div class="author-top">Александр Ростов</div>
@@ -386,19 +417,20 @@
       `;
       document.getElementById("go").onclick = () => {
         i = 0; score = 0;
-        deck = mixPhotos(QUESTIONS.length + 2);
+        deal();
+        deck = mixPhotos(round.length + 2);
         renderQ();
       };
     }
 
     async function renderQ() {
       locked = false;
-      const item = QUESTIONS[i];
+      const item = round[i];
       await showBg(photoFor(i));
-      if (i + 1 < QUESTIONS.length) warm(photoFor(i + 1));
+      if (i + 1 < round.length) warm(photoFor(i + 1));
       sheet.innerHTML = `
         <div class="author-top">Александр Ростов</div>
-        <div class="q-num">вопрос ${i + 1} из ${QUESTIONS.length}</div>
+        <div class="q-num">вопрос ${i + 1} из ${round.length}</div>
         <div class="rule"></div>
         <p class="question">${item.q}</p>
         <div class="options" id="opts"></div>
@@ -417,7 +449,7 @@
     function choose(idx, btn) {
       if (locked) return;
       locked = true;
-      const item = QUESTIONS[i];
+      const item = round[i];
       const buttons = [...document.querySelectorAll(".opt")];
       buttons.forEach((el, n) => {
         el.disabled = true;
@@ -429,10 +461,10 @@
         btn.classList.add("wrong");
       }
       const next = i + 1;
-      if (next < QUESTIONS.length) warm(photoFor(next));
+      if (next < round.length) warm(photoFor(next));
       setTimeout(() => {
         i += 1;
-        if (i < QUESTIONS.length) renderQ();
+        if (i < round.length) renderQ();
         else results();
       }, 850);
     }
@@ -444,7 +476,7 @@
         <div class="rule"></div>
         <div class="grow">
           <p class="q-num">итог</p>
-          <div class="score-big">${score} / ${QUESTIONS.length}</div>
+          <div class="score-big">${score} / ${round.length}</div>
           <p class="subtitle" style="margin-bottom:22px">${verdict(score)}</p>
           <button class="btn" id="keys">Правильные ответы</button>
           <div style="height:10px"></div>
@@ -458,7 +490,7 @@
 
     async function answers() {
       await showBg(photoFor(1));
-      const list = QUESTIONS.map((item, n) =>
+      const list = round.map((item, n) =>
         `<p><b>${n + 1}.</b> ${item.q}<br>${LETTERS[item.a]}) ${item.options[item.a]}<br>${item.why}</p>`
       ).join("");
       sheet.innerHTML = `
@@ -473,7 +505,7 @@
     }
 
     function verdict(s) {
-      if (s === QUESTIONS.length) return "всё верно. редкость.";
+      if (s === round.length) return "всё верно. редкость.";
       if (s >= 32) return "город знаешь.";
       if (s >= 20) return "середина земли, середина квиза.";
       return "есть куда гулять по улицам.";
