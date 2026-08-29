@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Иркутск. Не только Байкал</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #2a1c12;
+      --ink-soft: #4a3728;
+      --paper: #f3e6cf;
+      --paper-2: #e8d4b0;
+      --gold: #c4a05a;
+      --gold-dark: #8a6a32;
+      --wrong: #7a2e24;
+      --right: #2f5a38;
+      --veil: rgba(28, 18, 10, 0.72);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: #1a120c;
+      color: var(--paper);
+      font-family: "Source Serif 4", Georgia, serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .phone {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100dvh;
+      position: relative;
+      overflow: hidden;
+    }
+    .bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(0.35) sepia(0.35) contrast(0.92) brightness(0.7);
+      transform: scale(1.06);
+    }
+    .veil {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(20,12,6,0.82) 0%, var(--veil) 38%, var(--veil) 70%, rgba(14,9,5,0.9) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,230,180,0.015) 3px);
+    }
+    .frame {
+      position: absolute;
+      inset: 10px;
+      pointer-events: none;
+      border: 2px solid rgba(196,160,90,0.55);
+      box-shadow:
+        inset 0 0 0 1px rgba(42,28,18,0.6),
+        inset 0 0 0 6px rgba(243,230,207,0.08);
+    }
+    .frame::before, .frame::after {
+      content: "";
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.85;
+    }
+    .frame::before {
+      top: -2px; left: -2px;
+      border-width: 3px 0 0 3px;
+      border-top-left-radius: 4px;
+    }
+    .frame::after {
+      bottom: -2px; right: -2px;
+      border-width: 0 3px 3px 0;
+    }
+    .flourish {
+      position: absolute;
+      width: 72px;
+      height: 28px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+    .flourish svg { width: 100%; height: 100%; display: block; }
+    .fl-tl { top: 6px; left: 8px; }
+    .fl-tr { top: 6px; right: 8px; transform: scaleX(-1); }
+    .fl-bl { bottom: 6px; left: 8px; transform: scaleY(-1); }
+    .fl-br { bottom: 6px; right: 8px; transform: scale(-1); }
+
+    .sheet {
+      position: relative;
+      z-index: 2;
+      min-height: 100dvh;
+      padding: calc(28px + env(safe-area-inset-top)) 22px calc(22px + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+    }
+    .author-top {
+      text-align: center;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .rule {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.7;
+      margin: 6px 18px 12px;
+    }
+    h1 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 700;
+      font-size: clamp(34px, 9vw, 46px);
+      line-height: 0.95;
+      text-align: center;
+      color: #f7ead3;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.55);
+    }
+    .subtitle {
+      text-align: center;
+      font-style: italic;
+      color: #d9c4a0;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    .grow { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .meta {
+      text-align: center;
+      font-size: 13px;
+      color: #cbb894;
+      letter-spacing: 0.04em;
+    }
+    .ig {
+      display: block;
+      text-align: center;
+      margin-top: auto;
+      padding-top: 16px;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.16em;
+      font-size: 13px;
+      text-transform: lowercase;
+    }
+    .ig:hover { color: #e8d08a; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--gold-dark);
+      background:
+        linear-gradient(180deg, #f0ddb8 0%, #d7b57a 48%, #c4a05a 100%);
+      color: var(--ink);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 14px 16px;
+      border-radius: 2px;
+      box-shadow:
+        0 1px 0 rgba(255,240,210,0.45) inset,
+        0 8px 18px rgba(0,0,0,0.35);
+      cursor: pointer;
+    }
+    .btn:active { transform: translateY(1px); }
+
+    .q-num {
+      text-align: center;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .question {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(22px, 6.2vw, 28px);
+      line-height: 1.2;
+      text-align: center;
+      color: #f6ead4;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+      margin-bottom: 18px;
+    }
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .opt {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(196,160,90,0.55);
+      background: rgba(243,230,207,0.14);
+      backdrop-filter: blur(6px);
+      color: #f3e6cf;
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: 16px;
+      line-height: 1.3;
+      padding: 12px 14px;
+      cursor: pointer;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.18);
+    }
+    .opt span.key {
+      display: inline-block;
+      width: 1.4em;
+      color: var(--gold);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 700;
+    }
+    .opt.right {
+      background: rgba(47,90,56,0.72);
+      border-color: #9dcc9a;
+    }
+    .opt.wrong {
+      background: rgba(122,46,36,0.7);
+      border-color: #e0a090;
+    }
+    .opt:disabled { cursor: default; }
+
+    .score-big {
+      text-align: center;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 64px;
+      line-height: 1;
+      color: var(--gold);
+    }
+    .answers {
+      max-height: 52dvh;
+      overflow: auto;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #ead9b8;
+      padding-right: 4px;
+    }
+    .answers b { color: #f7ead3; }
+    .answers p { margin: 0 0 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(196,160,90,0.2); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="bg" id="bg"></div>
+    <div class="veil"></div>
+    <div class="frame"></div>
+    <div class="flourish fl-tl"><svg viewBox="0 0 120 40" fill="none"><path d="M4 28c18-2 22-20 38-20 10 0 12 8 22 8 14 0 20-14 52-14" stroke="#c4a05a" stroke-width="2.2"/><path d="M8 32c16 0 20-16 34-16 12 0 14 10 24 10" stroke="#c4a05a" stroke-width="1.2" opacity=".7"/></svg></div>
+    <div class="flourish fl-tr"><svg viewBox="0 0 120 40" fill="none"><path d="M4 28c18-2 22-20 38-20 10 0 12 8 22 8 14 0 20-14 52-14" stroke="#c4a05a" stroke-width="2.2"/><path d="M8 32c16 0 20-16 34-16 12 0 14 10 24 10" stroke="#c4a05a" stroke-width="1.2" opacity=".7"/></svg></div>
+    <div class="flourish fl-bl"><svg viewBox="0 0 120 40" fill="none"><path d="M4 28c18-2 22-20 38-20 10 0 12 8 22 8 14 0 20-14 52-14" stroke="#c4a05a" stroke-width="2.2"/></svg></div>
+    <div class="flourish fl-br"><svg viewBox="0 0 120 40" fill="none"><path d="M4 28c18-2 22-20 38-20 10 0 12 8 22 8 14 0 20-14 52-14" stroke="#c4a05a" stroke-width="2.2"/></svg></div>
+
+    <div class="sheet" id="sheet"></div>
+  </div>
+
+  <script>
+    const PHOTOS = {
+      start: "img/02_Irkutsk_s_vysoty.jpg",
+      q: [
+        "img/01_zima_ul_Gryaznova.jpg",
+        "img/08_reznoj_dom_zima.jpg",
+        "img/07_130_kvartal_ulica.jpg",
+        "img/04_Moskovskie_vorota.jpg",
+        "img/05_staroe_derevo_vorota.jpg",
+        "img/05_derevyanny_osobnyak.jpg",
+        "img/10_muzej_Trubeckih_zal.jpg",
+        "img/06_ploshchad_centr.jpg",
+        "img/NE_Irkutsk_Talcy_ostrog.jpg",
+        "img/04_Baikal_Listvyanka.jpg",
+        "img/07_ledokol_Angara.jpg",
+        "img/10_dom_Volkonskih_ili_pohozh.jpg"
+      ]
+    };
+
+    const QUESTIONS = [
+      {
+        q: "В каком году основан Иркутский острог?",
+        options: ["1581", "1661", "1703", "1825"],
+        a: 1,
+        why: "1661 год. Острог заложил отряд Якова Похабова."
+      },
+      {
+        q: "Откуда название города?",
+        options: ["от бурятского «ирэ» — приходить", "от реки Иркут, впадающей в Ангару", "от имени первого воеводы", "от острога на Байкале"],
+        a: 1,
+        why: "От реки Иркут. Город стоит на Ангаре у впадения Иркута и Ушаковки."
+      },
+      {
+        q: "Что изначально означало слово «бабр» на гербе?",
+        options: ["бобр", "соболь", "тигр", "медведь"],
+        a: 2,
+        why: "Тигр. Позже в описании «бабр» перепутали с «бобр»."
+      },
+      {
+        q: "Сколько примерно от Иркутска до Байкала?",
+        options: ["12 км", "66 км", "180 км", "400 км"],
+        a: 1,
+        why: "Около 66 км. Отсюда название «ворота Байкала»."
+      },
+      {
+        q: "Что случилось с центром в 1879 году?",
+        options: ["открыли университет", "прошёл первый поезд Транссиба", "большой пожар почти уничтожил исторический центр", "построили ГЭС"],
+        a: 2,
+        why: "Пожар 22 и 24 июня (6 июля) 1879 года."
+      },
+      {
+        q: "Какие три реки делят город?",
+        options: ["Ангара, Лена, Селенга", "Ангара, Иркут, Ушаковка", "Ангара, Енисей, Иркут", "Ангара, Китой, Белая"],
+        a: 1,
+        why: "Ангара, Иркут и Ушаковка."
+      },
+      {
+        q: "Где находится музей ледокола «Ангара»?",
+        options: ["на Ольхоне", "в 130-м квартале", "на борту самого ледокола у плотины ГЭС", "в доме Волконских"],
+        a: 2,
+        why: "Музей размещён на борту ледокола у водохранилища / плотины ГЭС."
+      },
+      {
+        q: "Кто заложил острог?",
+        options: ["Ермак", "Яков Похабов", "Афанасий Никитин", "Семён Дежнёв"],
+        a: 1,
+        why: "Яков Похабов, 6 июля 1661 года."
+      },
+      {
+        q: "С какого года Иркутск официально город, а не острог?",
+        options: ["1661", "1682", "1686", "1790"],
+        a: 2,
+        why: "В 1682 — центр воеводства, в 1686 — статус города."
+      },
+      {
+        q: "Какие два дома-музея декабристов стоят в Иркутске?",
+        options: ["Пестеля и Рылеева", "Трубецких и Волконских", "Муравьёва-Апостола и Каховского", "Бестужева и Кюхельбекера"],
+        a: 1,
+        why: "Дома Трубецких и Волконских."
+      },
+      {
+        q: "Как ещё называли острог в самом начале?",
+        options: ["Яндашский", "Листвянский", "Ангарский", "Байкальский"],
+        a: 0,
+        why: "Яндашский — по имени тувинского вождя Яндаша. Название не закрепилось."
+      },
+      {
+        q: "В каком году Екатерина II утвердила первый генеральный план Иркутска?",
+        options: ["1686", "1761", "1792", "1879"],
+        a: 2,
+        why: "4 августа 1792 года. На плане императрица написала: «Быть по сему»."
+      }
+    ];
+
+    const LETTERS = ["А", "Б", "В", "Г"];
+    let i = 0;
+    let score = 0;
+    let locked = false;
+
+    const bg = document.getElementById("bg");
+    const sheet = document.getElementById("sheet");
+
+    function setBg(src) {
+      bg.style.backgroundImage = "url('" + src + "')";
+    }
+
+    function startScreen() {
+      setBg(PHOTOS.start);
+      sheet.innerHTML = `
+        <div class="author-top">Александр Ростов</div>
+        <div class="rule"></div>
+        <div class="grow">
+          <h1>Иркутск.<br>Не только Байкал</h1>
+          <p class="subtitle">городская игра на 12 вопросов</p>
+        </div>
+        <button class="btn" id="go">Начать игру</button>
+        <a class="ig" href="https://instagram.com/rostov.av" target="_blank" rel="noopener">instagram: rostov.av</a>
+      `;
+      document.getElementById("go").onclick = () => {
+        i = 0; score = 0; renderQ();
+      };
+    }
+
+    function renderQ() {
+      locked = false;
+      const item = QUESTIONS[i];
+      setBg(PHOTOS.q[i]);
+      sheet.innerHTML = `
+        <div class="author-top">Александр Ростов</div>
+        <div class="q-num">вопрос ${i + 1} из 12</div>
+        <div class="rule"></div>
+        <p class="question">${item.q}</p>
+        <div class="options" id="opts"></div>
+        <a class="ig" href="https://instagram.com/rostov.av" target="_blank" rel="noopener">rostov.av</a>
+      `;
+      const box = document.getElementById("opts");
+      item.options.forEach((text, idx) => {
+        const b = document.createElement("button");
+        b.className = "opt";
+        b.innerHTML = `<span class="key">${LETTERS[idx]}</span> ${text}`;
+        b.onclick = () => choose(idx, b);
+        box.appendChild(b);
+      });
+    }
+
+    function choose(idx, btn) {
+      if (locked) return;
+      locked = true;
+      const item = QUESTIONS[i];
+      const buttons = [...document.querySelectorAll(".opt")];
+      buttons.forEach((el, n) => {
+        el.disabled = true;
+        if (n === item.a) el.classList.add("right");
+      });
+      if (idx === item.a) {
+        score += 1;
+      } else {
+        btn.classList.add("wrong");
+      }
+      setTimeout(() => {
+        i += 1;
+        if (i < QUESTIONS.length) renderQ();
+        else results();
+      }, 850);
+    }
+
+    function results() {
+      setBg(PHOTOS.start);
+      sheet.innerHTML = `
+        <div class="author-top">Александр Ростов</div>
+        <div class="rule"></div>
+        <div class="grow">
+          <p class="q-num">итог</p>
+          <div class="score-big">${score} / 12</div>
+          <p class="subtitle" style="margin-bottom:22px">${verdict(score)}</p>
+          <button class="btn" id="keys">Правильные ответы</button>
+          <div style="height:10px"></div>
+          <button class="btn" id="again" style="background:linear-gradient(180deg,#e8d4b0,#c9b089);font-size:18px;letter-spacing:.1em">Ещё раз</button>
+        </div>
+        <a class="ig" href="https://instagram.com/rostov.av" target="_blank" rel="noopener">instagram: rostov.av</a>
+      `;
+      document.getElementById("keys").onclick = answers;
+      document.getElementById("again").onclick = startScreen;
+    }
+
+    function answers() {
+      setBg("img/05_staroe_derevo_vorota.jpg");
+      const list = QUESTIONS.map((item, n) =>
+        `<p><b>${n + 1}.</b> ${item.q}<br>${LETTERS[item.a]}) ${item.options[item.a]}<br>${item.why}</p>`
+      ).join("");
+      sheet.innerHTML = `
+        <div class="author-top">Александр Ростов</div>
+        <div class="q-num">ключи</div>
+        <div class="rule"></div>
+        <div class="answers">${list}</div>
+        <button class="btn" id="home" style="margin-top:14px">Начало</button>
+        <a class="ig" href="https://instagram.com/rostov.av" target="_blank" rel="noopener">instagram: rostov.av · Александр Ростов</a>
+      `;
+      document.getElementById("home").onclick = startScreen;
+    }
+
+    function verdict(s) {
+      if (s === 12) return "всё верно. редкость.";
+      if (s >= 9) return "город знаешь.";
+      if (s >= 6) return "середина земли, середина квиза.";
+      return "есть куда гулять по улицам.";
+    }
+
+    startScreen();
+  </script>
+</body>
+</html>
