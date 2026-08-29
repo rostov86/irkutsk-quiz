@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Иркутск. Не только Байкал</title>
+  <title>Иркутск. Не торопись тыкать</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" />
@@ -131,7 +131,7 @@
       font-style: italic;
       color: #d9c4a0;
       margin-top: 10px;
-      font-size: 16px;
+      font-size: 15px;
     }
     .grow { flex: 1; display: flex; flex-direction: column; justify-content: center; }
     .meta {
@@ -185,7 +185,7 @@
     }
     .question {
       font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(22px, 6.2vw, 28px);
+      font-size: clamp(18px, 5.2vw, 24px);
       line-height: 1.2;
       text-align: center;
       color: #f6ead4;
@@ -257,104 +257,58 @@
     <div class="sheet" id="sheet"></div>
   </div>
 
+  <script src="questions.js"></script>
   <script>
-    const PHOTOS = {
-      start: "img/02_Irkutsk_s_vysoty.jpg",
-      q: [
-        "img/01_zima_ul_Gryaznova.jpg",
-        "img/08_reznoj_dom_zima.jpg",
-        "img/07_130_kvartal_ulica.jpg",
-        "img/04_Moskovskie_vorota.jpg",
-        "img/05_staroe_derevo_vorota.jpg",
-        "img/05_derevyanny_osobnyak.jpg",
-        "img/10_muzej_Trubeckih_zal.jpg",
-        "img/06_ploshchad_centr.jpg",
-        "img/NE_Irkutsk_Talcy_ostrog.jpg",
-        "img/04_Baikal_Listvyanka.jpg",
-        "img/07_ledokol_Angara.jpg",
-        "img/10_dom_Volkonskih_ili_pohozh.jpg"
-      ]
-    };
-
-    const QUESTIONS = [
-      {
-        q: "В каком году основан Иркутский острог?",
-        options: ["1581", "1661", "1703", "1825"],
-        a: 1,
-        why: "1661 год. Острог заложил отряд Якова Похабова."
-      },
-      {
-        q: "Откуда название города?",
-        options: ["от бурятского «ирэ» — приходить", "от реки Иркут, впадающей в Ангару", "от имени первого воеводы", "от острога на Байкале"],
-        a: 1,
-        why: "От реки Иркут. Город стоит на Ангаре у впадения Иркута и Ушаковки."
-      },
-      {
-        q: "Что изначально означало слово «бабр» на гербе?",
-        options: ["бобр", "соболь", "тигр", "медведь"],
-        a: 2,
-        why: "Тигр. Позже в описании «бабр» перепутали с «бобр»."
-      },
-      {
-        q: "Сколько примерно от Иркутска до Байкала?",
-        options: ["12 км", "66 км", "180 км", "400 км"],
-        a: 1,
-        why: "Около 66 км. Отсюда название «ворота Байкала»."
-      },
-      {
-        q: "Что случилось с центром в 1879 году?",
-        options: ["открыли университет", "прошёл первый поезд Транссиба", "большой пожар почти уничтожил исторический центр", "построили ГЭС"],
-        a: 2,
-        why: "Пожар 22 и 24 июня (6 июля) 1879 года."
-      },
-      {
-        q: "Какие три реки делят город?",
-        options: ["Ангара, Лена, Селенга", "Ангара, Иркут, Ушаковка", "Ангара, Енисей, Иркут", "Ангара, Китой, Белая"],
-        a: 1,
-        why: "Ангара, Иркут и Ушаковка."
-      },
-      {
-        q: "Где находится музей ледокола «Ангара»?",
-        options: ["на Ольхоне", "в 130-м квартале", "на борту самого ледокола у плотины ГЭС", "в доме Волконских"],
-        a: 2,
-        why: "Музей размещён на борту ледокола у водохранилища / плотины ГЭС."
-      },
-      {
-        q: "Кто заложил острог?",
-        options: ["Ермак", "Яков Похабов", "Афанасий Никитин", "Семён Дежнёв"],
-        a: 1,
-        why: "Яков Похабов, 6 июля 1661 года."
-      },
-      {
-        q: "С какого года Иркутск официально город, а не острог?",
-        options: ["1661", "1682", "1686", "1790"],
-        a: 2,
-        why: "В 1682 — центр воеводства, в 1686 — статус города."
-      },
-      {
-        q: "Какие два дома-музея декабристов стоят в Иркутске?",
-        options: ["Пестеля и Рылеева", "Трубецких и Волконских", "Муравьёва-Апостола и Каховского", "Бестужева и Кюхельбекера"],
-        a: 1,
-        why: "Дома Трубецких и Волконских."
-      },
-      {
-        q: "Как ещё называли острог в самом начале?",
-        options: ["Яндашский", "Листвянский", "Ангарский", "Байкальский"],
-        a: 0,
-        why: "Яндашский — по имени тувинского вождя Яндаша. Название не закрепилось."
-      },
-      {
-        q: "В каком году Екатерина II утвердила первый генеральный план Иркутска?",
-        options: ["1686", "1761", "1792", "1879"],
-        a: 2,
-        why: "4 августа 1792 года. На плане императрица написала: «Быть по сему»."
-      }
+    const PHOTOS = [
+      "img/01_zima_ul_Gryaznova.jpg",
+      "img/02_Irkutsk_s_vysoty.jpg",
+      "img/04_Baikal_Listvyanka.jpg",
+      "img/04_Moskovskie_vorota.jpg",
+      "img/05_derevyanny_osobnyak.jpg",
+      "img/05_staroe_derevo_vorota.jpg",
+      "img/06_ploshchad_centr.jpg",
+      "img/07_130_kvartal_ulica.jpg",
+      "img/07_ledokol_Angara.jpg",
+      "img/08_reznoj_dom_zima.jpg",
+      "img/10_dom_Volkonskih_ili_pohozh.jpg",
+      "img/10_muzej_Trubeckih_zal.jpg",
+      "img/NE_Irkutsk_Talcy_ostrog.jpg"
     ];
+
+    const QUESTIONS = window.QUESTIONS;
 
     const LETTERS = ["А", "Б", "В", "Г"];
     let i = 0;
     let score = 0;
     let locked = false;
+    let deck = [];
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let k = a.length - 1; k > 0; k--) {
+        const j = Math.floor(Math.random() * (k + 1));
+        [a[k], a[j]] = [a[j], a[k]];
+      }
+      return a;
+    }
+
+    function mixPhotos(need) {
+      const out = [];
+      while (out.length < need) {
+        const batch = shuffle(PHOTOS);
+        if (out.length && batch.length > 1 && batch[0] === out[out.length - 1]) {
+          const swap = batch.findIndex((p, idx) => idx > 0 && p !== out[out.length - 1]);
+          if (swap > 0) [batch[0], batch[swap]] = [batch[swap], batch[0]];
+        }
+        out.push(...batch);
+      }
+      return out.slice(0, need);
+    }
+
+    function photoFor(n) {
+      if (!deck.length) deck = mixPhotos(QUESTIONS.length + 2);
+      return deck[n % deck.length];
+    }
 
     const bg = document.getElementById("bg");
     const sheet = document.getElementById("sheet");
@@ -364,29 +318,32 @@
     }
 
     function startScreen() {
-      setBg(PHOTOS.start);
+      deck = mixPhotos(QUESTIONS.length + 2);
+      setBg(photoFor(0));
       sheet.innerHTML = `
         <div class="author-top">Александр Ростов</div>
         <div class="rule"></div>
         <div class="grow">
-          <h1>Иркутск.<br>Не только Байкал</h1>
-          <p class="subtitle">городская игра на 12 вопросов</p>
+          <h1>Иркутск.<br>Не торопись тыкать</h1>
+          <p class="subtitle">40 вопросов. история, власть, шанхайка, трамваи</p>
         </div>
         <button class="btn" id="go">Начать игру</button>
         <a class="ig" href="https://instagram.com/rostov.av" target="_blank" rel="noopener">instagram: rostov.av</a>
       `;
       document.getElementById("go").onclick = () => {
-        i = 0; score = 0; renderQ();
+        i = 0; score = 0;
+        deck = mixPhotos(QUESTIONS.length + 2);
+        renderQ();
       };
     }
 
     function renderQ() {
       locked = false;
       const item = QUESTIONS[i];
-      setBg(PHOTOS.q[i]);
+      setBg(photoFor(i));
       sheet.innerHTML = `
         <div class="author-top">Александр Ростов</div>
-        <div class="q-num">вопрос ${i + 1} из 12</div>
+        <div class="q-num">вопрос ${i + 1} из ${QUESTIONS.length}</div>
         <div class="rule"></div>
         <p class="question">${item.q}</p>
         <div class="options" id="opts"></div>
@@ -424,13 +381,13 @@
     }
 
     function results() {
-      setBg(PHOTOS.start);
+      setBg(photoFor(Math.floor(Math.random() * PHOTOS.length)));
       sheet.innerHTML = `
         <div class="author-top">Александр Ростов</div>
         <div class="rule"></div>
         <div class="grow">
           <p class="q-num">итог</p>
-          <div class="score-big">${score} / 12</div>
+          <div class="score-big">${score} / ${QUESTIONS.length}</div>
           <p class="subtitle" style="margin-bottom:22px">${verdict(score)}</p>
           <button class="btn" id="keys">Правильные ответы</button>
           <div style="height:10px"></div>
@@ -443,7 +400,7 @@
     }
 
     function answers() {
-      setBg("img/05_staroe_derevo_vorota.jpg");
+      setBg(photoFor(1));
       const list = QUESTIONS.map((item, n) =>
         `<p><b>${n + 1}.</b> ${item.q}<br>${LETTERS[item.a]}) ${item.options[item.a]}<br>${item.why}</p>`
       ).join("");
@@ -459,9 +416,9 @@
     }
 
     function verdict(s) {
-      if (s === 12) return "всё верно. редкость.";
-      if (s >= 9) return "город знаешь.";
-      if (s >= 6) return "середина земли, середина квиза.";
+      if (s === QUESTIONS.length) return "всё верно. редкость.";
+      if (s >= 32) return "город знаешь.";
+      if (s >= 20) return "середина земли, середина квиза.";
       return "есть куда гулять по улицам.";
     }
 
